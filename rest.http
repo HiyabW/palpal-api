@@ -1,0 +1,142 @@
+### Home
+GET http://localhost:3007
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc1MTQyNDcsImV4cCI6MTcyNzUxNDI2NywiYXVkIjoiNjZmNzg4YWU4YjgxZDcyZDg3MzA2OTJhIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.I7nTvbSOGUe8-UsF5LDkJIQwL8L9_aet5Pury4bYrEM
+
+### Register
+POST http://localhost:3007/auth/register
+Content-Type: application/json
+
+{
+    "email": "hi@gmail.com",
+    "password": "hi",
+    "phone": "1111111111",
+    "name": "hi"
+}
+
+### Login
+POST http://localhost:3007/auth/login
+Content-Type: application/json
+
+{
+    "email": "heyabw@gmail.com",
+    "password": "heyabandstar"
+}
+
+### Survey
+POST http://localhost:3007/auth/survey
+Content-Type: application/json
+
+{
+    "email": "keila@gmail.com",
+    "gender": "Woman",
+    "agePreferences": [
+        {
+            "min": 23,
+            "max": 46
+        }
+    ],
+    "age": "10/03/2000",
+    "city": [
+        "Los Angeles"
+    ],
+    "budget": [
+        {
+            "min": 320,
+            "max": 3187
+        }
+    ],
+    "leaseType": [
+        "Annual",
+        "Monthly"
+    ],
+    "cleanlinessPreferences": "Not Important",
+    "petPreferences": "No",
+    "smokerPreferences": "No",
+    "guestPreferences": "Sometimes"
+}
+
+### RefreshToken
+POST http://localhost:3007/auth/refreshToken
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc1MTQyMTgsImV4cCI6MTc1OTA3MTgxOCwiYXVkIjoiNjZmNzg4YWU4YjgxZDcyZDg3MzA2OTJhIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.5rf8prp6vexADWSasyzt7xn88VpxyAt4wD48eUQNzOo"
+}
+
+### Logout
+POST http://localhost:3007/auth/logOut
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc1MTQyMTgsImV4cCI6MTc1OTA3MTgxOCwiYXVkIjoiNjZmNzg4YWU4YjgxZDcyZDg3MzA2OTJhIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.5rf8prp6vexADWSasyzt7xn88VpxyAt4wD48eUQNzOo"
+}
+
+### User Compatibility
+POST http://localhost:3007/feed/
+Content-Type: application/json
+
+{
+    "id": "6721d5f37778d53abcfceb72"
+}
+
+
+### Match with a user
+POST http://localhost:3007/match/saveMatch
+Content-Type: application/json
+
+{
+    "from": "67045f37dd648a6a03912a92",
+    "to": "67045f37dd648a6a03912a92",
+    "isAMatch": true
+}
+
+### Unmatch with a user
+POST http://localhost:3007/match/unmatch
+Content-Type: application/json
+
+{
+    "from": "6706fcbe9cbe8589611a4007",
+    "to": "67045f37dd648a6a03912a92"
+}
+
+### Check if its a match
+POST http://localhost:3007/match/saveMatch
+Content-Type: application/json
+
+{
+    "from": "67047e59dd648a6a03912aa5",
+    "to": "67045f37dd648a6a03912a92",
+    "isAMatch": true
+}
+
+### Get Chats
+POST http://localhost:3007/chat/getChats
+Content-Type: application/json
+
+{
+    "id": "6706fcbe9cbe8589611a4007"
+}
+
+### GoogleAi Chat
+POST http://localhost:3007/chat/chatAI
+Content-Type: application/json
+
+{
+    "prompt": "How is your day?"
+}
+
+### Get User
+POST http://localhost:3007/feed/getUser
+Content-Type: application/json
+
+{
+    "id": "6721d5f37778d53abcfceb72"
+}
+
+### Delete all of User's images
+POST http://localhost:3007/images/deleteImages
+Content-Type: application/json
+
+{
+    "userId": "67045f37dd648a6a03912a92"
+}
