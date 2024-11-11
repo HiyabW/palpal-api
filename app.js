@@ -14,6 +14,7 @@ const chatRoute = require('./routes/chat')
 
 const app = express()
 app.use(morgan('dev'))
+app.use(express.static('dist'));
 const corsOptions = {
     origin: true,
     credentials: true
