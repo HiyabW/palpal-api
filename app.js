@@ -5,7 +5,6 @@ require('dotenv').config()
 require('./helpers/initMongoDb')
 const { verifyAccessToken } = require('./helpers/jwtHelper')
 const cors = require('cors')
-const serverless = require('serverless-http');
 
 
 const authRoute = require('./routes/auth')
@@ -42,8 +41,8 @@ app.use(async (req, res, next) => {
 
 app.use((err, req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", '*')
-        res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
-        res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
+    res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
+    res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
     res.status(err.status || 500)
     res.send({
         error: {
