@@ -8,11 +8,14 @@ const { signRefreshToken } = require('../helpers/jwtHelper')
 const { verifyRefreshToken } = require('../helpers/jwtHelper')
 
 router.post('/', async (req, res, next) => {
-
+    console.log("here")
     res.send("auth landing route")
 })
 
 router.post('/register', async (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", '*')
+    res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
+    res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
     try {
         const doesExist = await User.findOne({ email: req.body.email })
         if (doesExist) throw createError.Conflict(`${req.body.email} is already registered`)
@@ -23,11 +26,6 @@ router.post('/register', async (req, res, next) => {
         const accessToken = await signAccessToken(savedUser.id)
         const refreshToken = await signAccessToken(savedUser.id)
 
-
-        res.setHeader("Access-Control-Allow-Origin", '*')
-        res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
-        res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
-
         res.send({ accessToken, refreshToken, id })
     } catch (error) {
         next(error)
@@ -35,6 +33,9 @@ router.post('/register', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", '*')
+    res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
+    res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
     try {
         const user = await User.findOne({ email: req.body.email })
         if (!user) throw createError.NotFound('User Not Registered')
@@ -49,9 +50,6 @@ router.post('/login', async (req, res, next) => {
 
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
-        res.setHeader("Access-Control-Allow-Origin", '*')
-        res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
-        res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
         res.send({ accessToken, refreshToken, gender, id })
     } catch (err) {
         next(err)
