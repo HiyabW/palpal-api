@@ -68,8 +68,7 @@ router.post('/', async (req, res, next) => {
         let cityPreferences = currUser.city
 
         /* NON NEGOTIABLES: GENDER AND CITY */
-        const users = await User.find({ gender: { $in: genderPreferences }, city: { $in: cityPreferences }, _id: { $ne: new ObjectId('6730784af24ec4375cf95a17') }, email: { $ne: currUser.email }, expectedMoveOut: { $gt: new Date().toISOString() } })
-        console.log({ gender: { in: genderPreferences }, city: { in: cityPreferences }, email: { ne: currUser.email }, expectedMoveOut: { gt: new Date().toISOString() } })
+        const users = await User.find({ gender: { $in: genderPreferences }, city: { $in: cityPreferences }, _id: { $ne: new ObjectId('673eed0fd24e7b1c05d6616e') }, email: { $ne: currUser.email }, expectedMoveOut: { $gt: new Date().toISOString() } })
         let compatibleUsers = {}
         let sortedCompatibleUsers = {}
         let scoring = []
@@ -78,13 +77,16 @@ router.post('/', async (req, res, next) => {
 
         for (let i = 0; i < users.length; ++i) {
             const user = users[i]
+            console.log(user)
 
             // Before even checking anything, make sure currUser hasnt already denied user in Match table
             const alreadyDenied = await Match.find({ from: currUser._id, to: user._id })
+            console.log(alreadyDenied)
 
             if (alreadyDenied.length === 0) {
                 /* First get all of that user's images */
                 const currUserImages = await Image.find({ owner: user._id })
+                console.log(currUserImages)
                 images[user.email] = [...currUserImages]
 
                 let score = 0

@@ -18,7 +18,7 @@ async function getCommonElements(list1, list2) {
         }
     }
     // Add AI Bot so it'll always be there to chat with!
-    commonElements.push('6730784af24ec4375cf95a17')
+    commonElements.push('673eed0fd24e7b1c05d6616e')
     return commonElements
 }
 
@@ -96,7 +96,7 @@ router.post('/chatAI', async (req, res, next) => {
             const message = result?.response?.candidates[0]?.content?.parts[0]?.text
 
             // Then save as a chat message
-            const chat = new Chat({from: new ObjectId('6730784af24ec4375cf95a17'), to: req.body.from, message:message, date: Date.now()})
+            const chat = new Chat({from: new ObjectId('673eed0fd24e7b1c05d6616e'), to: req.body.from, message:message, date: Date.now()})
             const savedChat = await chat.save()
 
             res.send({ message, savedChat })

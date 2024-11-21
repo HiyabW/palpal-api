@@ -1,6 +1,5 @@
 ### Home
-GET http://localhost:3007
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc1MTQyNDcsImV4cCI6MTcyNzUxNDI2NywiYXVkIjoiNjZmNzg4YWU4YjgxZDcyZDg3MzA2OTJhIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.I7nTvbSOGUe8-UsF5LDkJIQwL8L9_aet5Pury4bYrEM
+GET http://localhost:3007/auth/
 
 ### Register
 POST http://localhost:3007/auth/register
@@ -19,7 +18,7 @@ Content-Type: application/json
 
 {
     "email": "heyabw@gmail.com",
-    "password": "heyabandstar"
+    "password": "heyab"
 }
 
 ### Survey
@@ -76,7 +75,7 @@ POST http://localhost:3007/feed/
 Content-Type: application/json
 
 {
-    "id": "6730784af24ec4375cf95a17"
+    "id": "673eed0fd24e7b1c05d6616e"
 }
 
 
@@ -122,7 +121,7 @@ POST http://localhost:3007/chat/chatAI
 Content-Type: application/json
 
 {
-    "prompt": "How is your day?"
+    "message": "How is your day?"
 }
 
 ### Get User
@@ -130,7 +129,7 @@ POST http://localhost:3007/feed/getUser
 Content-Type: application/json
 
 {
-    "id": "6721d5f37778d53abcfceb72"
+    "id": "673eed0fd24e7b1c05d6616e"
 }
 
 ### Delete all of User's images
