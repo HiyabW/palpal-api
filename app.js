@@ -30,10 +30,10 @@ app.get('/', (req, res, next) => {
 
 
 app.use('/auth', authRoute)
-app.use('/feed', feedRoute)
-app.use('/match', matchRoute)
-app.use('/chat', chatRoute)
-app.use('/images', imageRoute)
+app.use('/feed', verifyAccessToken, feedRoute)
+app.use('/match', verifyAccessToken, matchRoute)
+app.use('/chat', verifyAccessToken, chatRoute)
+app.use('/images', verifyAccessToken, imageRoute)
 
 app.use(async (req, res, next) => {
     next(createError.NotFound('This route does not exist'))
