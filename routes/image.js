@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb')
 router.post('/addImages', async (req, res, next) => {
     try {
         for (let i = 0; i < req.body.images.length; ++i) {
-            const image = new Image({owner:req.body.owner, image: req.body.images[i]})
+            const image = new Image({owner: req.user._id, image: req.body.images[i]})
             await image.save()
         }
 
@@ -25,7 +25,7 @@ router.post('/addImages', async (req, res, next) => {
 
 router.post('/deleteImages', async (req, res, next) => {
     try {
-        const user = await User.findOne({ _id: req.body.userId })
+        const user = await User.findOne({ _id: req.user._id })
         const deletedImagesResult = await Image.deleteMany({ owner: user._id })
         console.log(deletedImagesResult)
 
