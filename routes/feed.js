@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 const { ObjectId } = require('mongodb');
 
 router.post('/getUser', async (req, res, next) => {
-    const user = await User.findOne({ _id: req.body.id })
+    const user = await User.findOne({ _id: req.user._id })
     let images = {}
     const currUserImages = await Image.find({ owner: user._id })
     images = [...currUserImages]
@@ -56,7 +56,7 @@ router.post('/', async (req, res, next) => {
     /****************************************/
 
     try {
-        const currUser = await User.findOne({ _id: req.body.id })
+        const currUser = await User.findOne({ _id: req.user._id })
 
         const currUserBudgetMax = currUser.budget[0].max
         const currUserExpectedMoveOut = currUser.expectedMoveOut[0]

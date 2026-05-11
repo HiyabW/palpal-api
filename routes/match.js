@@ -4,14 +4,14 @@ const Match = require('../models/matchModels')
 const { ObjectId } = require('mongodb')
 
 router.post('/saveMatch', async (req, res, next) => {
-    const match = new Match(req.body)
+    const match = new Match({ ...req.body, from: req.user._id })
     const savedMatch = await match.save()
 
     res.send({ savedMatch })
 })
 
 router.post('/getMatch', async (req, res, next) => {
-    const from = ObjectId.createFromHexString(req.body.from)
+    const from = ObjectId.createFromHexString(req.user._id)
     const to = ObjectId.createFromHexString(req.body.to)
 
     console.log({ from, to, isAMatch: true })
@@ -28,7 +28,7 @@ router.post('/getMatch', async (req, res, next) => {
 })
 
 router.post('/unmatch', async (req, res, next) => {
-    const from = ObjectId.createFromHexString(req.body.from)
+    const from = ObjectId.createFromHexString(req.user._id)
     const to = ObjectId.createFromHexString(req.body.to)
     res.setHeader("Access-Control-Allow-Origin", '*')
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
