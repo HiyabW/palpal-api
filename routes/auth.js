@@ -19,14 +19,20 @@ router.post('/register', async (req, res, next) => {
         const id = user?._id
         const savedUser = await user.save()
         const accessToken = await signAccessToken(savedUser.id)
-        const refreshToken = await signAccessToken(savedUser.id)
+        const refreshToken = await signRefreshToken(savedUser.id)
 
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         res.setHeader("Access-Control-Allow-Origin", '*')
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
         res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
 
-        res.send({ accessToken, refreshToken, id })
+        res.send({ accessToken, id })
     } catch (error) {
         next(error)
     }
@@ -47,10 +53,18 @@ router.post('/login', async (req, res, next) => {
 
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
         res.setHeader("Access-Control-Allow-Origin", '*')
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
         res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
-        res.send({ accessToken, refreshToken, gender, id })
+        res.send({ accessToken, gender, id })
     } catch (err) {
         next(err)
     }
@@ -112,14 +126,21 @@ router.post('/survey', verifyAccessToken, async (req, res, next) => {
 
 router.post('/refreshToken', async (req, res, next) => {
     try {
-        const { refreshToken } = req.body
-        if (!refreshToken) throw createError.BadRequest()
+        const refreshToken = req.cookies?.refreshToken
+        if (!refreshToken) throw createError.Unauthorized('No refresh token')
         const userId = await verifyRefreshToken(refreshToken)
 
         const accessToken = await signAccessToken(userId)
-        const refToken = await signRefreshToken(userId)
+        const newRefreshToken = await signRefreshToken(userId)
 
-        res.send({ accessToken, refToken })
+        res.cookie('refreshToken', newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
+        res.send({ accessToken })
     } catch (error) {
         next(error)
     }

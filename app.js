@@ -5,6 +5,7 @@ require('dotenv').config()
 require('./helpers/initMongoDb')
 const { verifyAccessToken } = require('./helpers/jwtHelper')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 
 const authRoute = require('./routes/auth')
@@ -21,8 +22,9 @@ const corsOptions = {
     credentials: true
 }
 app.options('*', cors(corsOptions))
-app.use(express.json({ limit: "50mb", }))
-app.use(express.urlencoded({ limit: "50mb", extended: true }))
+app.use(cookieParser())
+app.use(express.json({ limit: "10mb" }))
+app.use(express.urlencoded({ limit: "10mb", extended: true }))
 
 app.get('/', (req, res, next) => {
     res.send("hello frm express")
