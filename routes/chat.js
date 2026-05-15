@@ -5,9 +5,6 @@ const User = require('../models/userModels')
 const Match = require('../models/matchModels')
 const Image = require('../models/imageModels')
 const { ObjectId } = require('mongodb')
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-require('dotenv').config();
-
 async function getCommonElements(list1, list2) {
     let commonElements = []
     for (let i = 0; i < list1.length; ++i) {
@@ -17,8 +14,6 @@ async function getCommonElements(list1, list2) {
             }
         }
     }
-    // Add AI Bot so it'll always be there to chat with!
-    commonElements.push('673eed0fd24e7b1c05d6616e')
     return commonElements
 }
 
@@ -76,34 +71,6 @@ router.post('/sendMessage', async (req, res, next) => {
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
         res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
         res.send(savedChat)
-    } catch (e) {
-        next(e)
-    }
-})
-
-router.post('/chatAI', async (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", '*')
-    res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
-    res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
-    try {
-        const prompt = req.body.message;
-
-        try {
-            // Get response from AI
-            const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            const result = await model.generateContent(prompt);
-            const message = result?.response?.candidates[0]?.content?.parts[0]?.text
-
-            // Then save as a chat message
-            const chat = new Chat({from: new ObjectId('673eed0fd24e7b1c05d6616e'), to: req.user._id, message:message, date: Date.now()})
-            const savedChat = await chat.save()
-
-            res.send({ message, savedChat })
-
-        } catch (e) {
-            next(e)
-        }
     } catch (e) {
         next(e)
     }
