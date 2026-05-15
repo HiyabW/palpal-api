@@ -3,9 +3,7 @@ const router = express.Router();
 const createError = require('http-errors')
 const User = require('../models/userModels')
 const { authSchema } = require('../helpers/validationSchema')
-const { signAccessToken } = require('../helpers/jwtHelper')
-const { signRefreshToken } = require('../helpers/jwtHelper')
-const { verifyRefreshToken } = require('../helpers/jwtHelper')
+const { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToken } = require('../helpers/jwtHelper')
 
 router.post('/', async (req, res, next) => {
     console.log("here")
@@ -58,7 +56,7 @@ router.post('/login', async (req, res, next) => {
     }
 })
 
-router.post('/survey', async (req, res, next) => {
+router.post('/survey', verifyAccessToken, async (req, res, next) => {
     try {
         console.log(1)
 
