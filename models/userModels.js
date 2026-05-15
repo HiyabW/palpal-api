@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new Schema({
     email: {
@@ -92,10 +92,10 @@ UserSchema.pre('save', async function (next) {
     try {
         let hashPassword = new Promise((resolve, reject) => {
             bcrypt.genSalt(10, function (err, salt) {
-                bcrypt.hash(unhashedPassword, salt, null, function (err, hash) {
+                bcrypt.hash(unhashedPassword, salt, function (err, hash) {
                     if (err) {
                         console.log("Error hashing password")
-                        next(error);
+                        next(err);
                     }
                     resolve(hash)
                 })
@@ -123,7 +123,7 @@ UserSchema.methods.isValidPassword = async function (password) {
                 resolve(result)
             })
         } catch (err) {
-            throw (error)
+            throw (err)
         }
     })
 }
