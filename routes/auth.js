@@ -133,7 +133,7 @@ router.delete('/logout', async (req, res, next) => {
 
 
     } catch (err) {
-        next(error)
+        next(err)
     }
     res.send("logout route")
 })
