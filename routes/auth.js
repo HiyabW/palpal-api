@@ -4,13 +4,22 @@ const createError = require('http-errors')
 const User = require('../models/userModels')
 const { authSchema } = require('../helpers/validationSchema')
 const { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToken } = require('../helpers/jwtHelper')
+const rateLimit = require('express-rate-limit')
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: { status: 429, message: 'Too many attempts, please try again in 15 minutes.' } }
+})
 
 router.post('/', async (req, res, next) => {
     console.log("here")
     res.send("auth landing route")
 })
 
-router.post('/register', async (req, res, next) => {
+router.post('/register', authLimiter, async (req, res, next) => {
     try {
         const doesExist = await User.findOne({ email: req.body.email })
         if (doesExist) throw createError.Conflict(`${req.body.email} is already registered`)
@@ -38,7 +47,7 @@ router.post('/register', async (req, res, next) => {
     }
 })
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', authLimiter, async (req, res, next) => {
     try {
         const user = await User.findOne({ email: req.body.email })
         if (!user) throw createError.NotFound('User Not Registered')
