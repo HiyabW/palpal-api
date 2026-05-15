@@ -69,10 +69,6 @@ const UserSchema = new Schema({
         type: String,
         required: false
     },
-    smokerPreferences: {
-        type: String,
-        required: false
-    },
     expectedMoveOut: {
         type: Date,
         required: false
