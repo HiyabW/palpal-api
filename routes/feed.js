@@ -59,7 +59,7 @@ router.post('/', async (req, res, next) => {
         const currUser = await User.findOne({ _id: req.user._id })
 
         const currUserBudgetMax = currUser.budget[0].max
-        const currUserExpectedMoveOut = currUser.expectedMoveOut[0]
+        const currUserExpectedMoveOut = currUser.expectedMoveOut
         let genderPreferences = currUser.genderPreferences
         for (let i = 0; i < genderPreferences.length; ++i) {
             genderPreferences[i] = pluralToSingularGender[genderPreferences[i]]
@@ -91,7 +91,7 @@ router.post('/', async (req, res, next) => {
 
                 let score = 0
                 const userAge = getAge(today, user['age'])
-                const userExpectedMoveOut = user.expectedMoveOut[0]
+                const userExpectedMoveOut = user.expectedMoveOut
                 const userBudgetMin = user.budget[0].min
                 const userBudgetMax = user.budget[0].max
 
