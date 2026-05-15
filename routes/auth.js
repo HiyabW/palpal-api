@@ -3,9 +3,7 @@ const router = express.Router();
 const createError = require('http-errors')
 const User = require('../models/userModels')
 const { authSchema } = require('../helpers/validationSchema')
-const { signAccessToken } = require('../helpers/jwtHelper')
-const { signRefreshToken } = require('../helpers/jwtHelper')
-const { verifyRefreshToken } = require('../helpers/jwtHelper')
+const { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToken } = require('../helpers/jwtHelper')
 
 router.post('/', async (req, res, next) => {
     console.log("here")
@@ -58,11 +56,50 @@ router.post('/login', async (req, res, next) => {
     }
 })
 
-router.post('/survey', async (req, res, next) => {
+router.post('/survey', verifyAccessToken, async (req, res, next) => {
     try {
-        console.log(1)
+        const {
+            name,
+            phone,
+            age,
+            gender,
+            genderPreferences,
+            agePreferences,
+            budget,
+            city,
+            cleanlinessPreferences,
+            guestPreferences,
+            leaseType,
+            petPreferences,
+            smokerPreferences,
+            bio,
+            expectedMoveOut,
+            hobbies,
+        } = req.body
 
-        const updated = await User.updateOne({ _id: req.body._id }, { $set: req.body })
+        const allowedFields = {
+            name,
+            phone,
+            age,
+            gender,
+            genderPreferences,
+            agePreferences,
+            budget,
+            city,
+            cleanlinessPreferences,
+            guestPreferences,
+            leaseType,
+            petPreferences,
+            smokerPreferences,
+            bio,
+            expectedMoveOut,
+            hobbies,
+        }
+
+        const updated = await User.updateOne(
+            { _id: req.user._id },
+            { $set: allowedFields }
+        )
 
         res.setHeader("Access-Control-Allow-Origin", '*')
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
