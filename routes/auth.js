@@ -58,9 +58,48 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/survey', verifyAccessToken, async (req, res, next) => {
     try {
-        console.log(1)
+        const {
+            name,
+            phone,
+            age,
+            gender,
+            genderPreferences,
+            agePreferences,
+            budget,
+            city,
+            cleanlinessPreferences,
+            guestPreferences,
+            leaseType,
+            petPreferences,
+            smokerPreferences,
+            bio,
+            expectedMoveOut,
+            hobbies,
+        } = req.body
 
-        const updated = await User.updateOne({ _id: req.body._id }, { $set: req.body })
+        const allowedFields = {
+            name,
+            phone,
+            age,
+            gender,
+            genderPreferences,
+            agePreferences,
+            budget,
+            city,
+            cleanlinessPreferences,
+            guestPreferences,
+            leaseType,
+            petPreferences,
+            smokerPreferences,
+            bio,
+            expectedMoveOut,
+            hobbies,
+        }
+
+        const updated = await User.updateOne(
+            { _id: req.user._id },
+            { $set: allowedFields }
+        )
 
         res.setHeader("Access-Control-Allow-Origin", '*')
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
