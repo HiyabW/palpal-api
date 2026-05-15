@@ -12,7 +12,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "@hapi/joi": "^17.1.1",
-    "bcrypt-nodejs": "^0.0.3",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
