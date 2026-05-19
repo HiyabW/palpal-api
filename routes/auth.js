@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const createError = require('http-errors')
 const User = require('../models/userModels')
-const { authSchema } = require('../helpers/validationSchema')
+const { registerSchema, loginSchema } = require('../helpers/validationSchema')
 const { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToken } = require('../helpers/jwtHelper')
 const rateLimit = require('express-rate-limit')
 const asyncHandler = require('../helpers/asyncHandler')
+const validate = require('../helpers/validate')
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -20,7 +21,7 @@ router.post('/', asyncHandler(async (req, res, next) => {
     res.send("auth landing route")
 }))
 
-router.post('/register', authLimiter, asyncHandler(async (req, res, next) => {
+router.post('/register', authLimiter, validate(registerSchema), asyncHandler(async (req, res, next) => {
     const doesExist = await User.findOne({ email: req.body.email })
     if (doesExist) throw createError.Conflict(`${req.body.email} is already registered`)
 
@@ -44,7 +45,7 @@ router.post('/register', authLimiter, asyncHandler(async (req, res, next) => {
     res.send({ accessToken, id })
 }))
 
-router.post('/login', authLimiter, asyncHandler(async (req, res, next) => {
+router.post('/login', authLimiter, validate(loginSchema), asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
     if (!user) throw createError.NotFound('User Not Registered')
     const isMatch = await user.isValidPassword(req.body.password)
