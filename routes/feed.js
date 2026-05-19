@@ -6,8 +6,9 @@ const Image = require('../models/imageModels');
 const Match = require('../models/matchModels');
 const mongoose = require('mongoose')
 const { ObjectId } = require('mongodb');
+const asyncHandler = require('../helpers/asyncHandler')
 
-router.post('/getUser', async (req, res, next) => {
+router.post('/getUser', asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ _id: req.user._id })
     let images = {}
     const currUserImages = await Image.find({ owner: user._id })
@@ -17,9 +18,9 @@ router.post('/getUser', async (req, res, next) => {
     res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
     res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
     res.send({ user, images })
-})
+}))
 
-router.post('/', async (req, res, next) => {
+router.post('/', asyncHandler(async (req, res, next) => {
 
     /**** Util funcitons and variables *****/
     const pluralToSingularGender = {
@@ -55,8 +56,7 @@ router.post('/', async (req, res, next) => {
     }
     /****************************************/
 
-    try {
-        const currUser = await User.findOne({ _id: req.user._id })
+    const currUser = await User.findOne({ _id: req.user._id })
 
         const currUserBudgetMax = currUser.budget[0].max
         const currUserExpectedMoveOut = currUser.expectedMoveOut
@@ -152,10 +152,7 @@ router.post('/', async (req, res, next) => {
         res.setHeader("Access-Control-Allow-Origin", '*')
         res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
         res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
-        res.send({ "compatibleUsers": sortedCompatibleUsers, scoring, images })
-    } catch (error) {
-        next(error)
-    }
-})
+    res.send({ "compatibleUsers": sortedCompatibleUsers, scoring, images })
+}))
 
 module.exports = router;

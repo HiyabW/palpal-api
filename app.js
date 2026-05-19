@@ -42,14 +42,23 @@ app.use(async (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
+    const status = err.status || 500
+    console.error(JSON.stringify({
+        message: err.message,
+        stack: err.stack,
+        status,
+        path: req.path,
+        method: req.method,
+    }))
     res.setHeader("Access-Control-Allow-Origin", '*')
     res.setHeader("Access-Control-Allow-Methods", 'GET, POST')
     res.setHeader("Access-Control-Allow-Headers", 'Content-Type,Authorization,timeout')
-    res.status(err.status || 500)
+    const message = status >= 500 ? 'Internal server error' : err.message
+    res.status(status)
     res.send({
         error: {
-            status: err.status || 500,
-            message: err.message
+            status,
+            message,
         }
     })
 })
