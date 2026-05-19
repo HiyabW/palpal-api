@@ -2,15 +2,16 @@ const express = require('express')
 const router = express.Router()
 const Match = require('../models/matchModels')
 const { ObjectId } = require('mongodb')
+const asyncHandler = require('../helpers/asyncHandler')
 
-router.post('/saveMatch', async (req, res, next) => {
+router.post('/saveMatch', asyncHandler(async (req, res, next) => {
     const match = new Match({ ...req.body, from: req.user._id })
     const savedMatch = await match.save()
 
     res.send({ savedMatch })
-})
+}))
 
-router.post('/getMatch', async (req, res, next) => {
+router.post('/getMatch', asyncHandler(async (req, res, next) => {
     const from = ObjectId.createFromHexString(req.user._id)
     const to = ObjectId.createFromHexString(req.body.to)
 
@@ -25,9 +26,9 @@ router.post('/getMatch', async (req, res, next) => {
     else {
         res.send({ isAMatch: false })
     }
-})
+}))
 
-router.post('/unmatch', async (req, res, next) => {
+router.post('/unmatch', asyncHandler(async (req, res, next) => {
     const from = ObjectId.createFromHexString(req.user._id)
     const to = ObjectId.createFromHexString(req.body.to)
     res.setHeader("Access-Control-Allow-Origin", '*')
@@ -42,6 +43,6 @@ router.post('/unmatch', async (req, res, next) => {
     else {
         res.send({ isAMatch: false })
     }
-})
+}))
 
 module.exports = router;
